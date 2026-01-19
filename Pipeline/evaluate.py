@@ -8,7 +8,7 @@ from pathlib import Path
 import json
 from typing import List, Dict
 
-from retrieve import retrieve
+from retrieve import retrieve, rerank_results
 
 # Configuration
 
@@ -60,6 +60,7 @@ def main():
         relevant_docs = item["relevant_docs"]
 
         results = retrieve(query, records, TOP_K)
+        results = rerank_results(query, results)
         p_at_k = precision_at_k(results, relevant_docs, TOP_K)
         total_precision += p_at_k
 

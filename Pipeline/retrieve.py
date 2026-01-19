@@ -43,6 +43,38 @@ def cosine_similarity(vec_a: List[float], vec_b: List[float]) -> float:
     
     return dot / (norm_a * norm_b)
 
+# Reranking Results
+
+def rerank_results(query, results):
+    query_lower = query.lower()
+
+    for r in results:
+        score = r["score"]
+        boost = 0.0
+
+        doc_id = r.get("document_id", "").lower()
+        text = (r.get("text") or "").lower()
+
+        # Strong signal: document title
+        if "telemetry" in query_lower and "telemetry" in doc_id:
+            boost += 0.5
+        if "dashboard" in query_lower and "dashboard" in doc_id:
+            boost += 0.5
+        if "log" in query_lower and "log" in doc_id:
+            boost += 0.5
+
+        # Weak signal: content overlap
+        for term in ["latency", "outage", "access", "search"]:
+            if term in query_lower and term in text:
+                boost += 0.1
+
+        r["score"] = score + boost
+        r["rerank_boost"] = boost
+
+    results.sort(key=lambda x: x["score"], reverse=True)
+    return results
+
+
 # Retrieving similar chunks
 
 def retrieve(query: str, records: list, top_k: int = TOP_K):
@@ -63,11 +95,11 @@ def retrieve(query: str, records: list, top_k: int = TOP_K):
             "document_id": record["document_id"],
             "chunk_id": record["chunk_id"],
             "heading": record.get("heading"),
-            "text": record["text"],
+            "text": record["text"]
         })
 
     scored_chunks.sort(key =lambda x: x["score"], reverse=True)
-    return scored_chunks[:top_k]
+    return scored_chunks[:top_k] 
 
 # Main 
 
