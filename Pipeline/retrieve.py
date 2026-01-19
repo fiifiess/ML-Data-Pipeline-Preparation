@@ -45,34 +45,45 @@ def cosine_similarity(vec_a: List[float], vec_b: List[float]) -> float:
 
 # Reranking Results
 
-def rerank_results(query, results):
-    query_lower = query.lower()
+def rerank_results(query: str, results: list) -> list:
+    """
+    Query-aware reranking for retrieval results.
+    Boosts chunks based on:
+      - Heading relevance
+      - Keyword overlap in chunk text
+      - Optional tags/metadata if present
+    Works for any query or document set.
+    """
+    query_terms = set(query.lower().split())
 
     for r in results:
-        score = r["score"]
+        # Defensive: handle missing fields
+        heading = (r.get("heading") or "").lower()
+        text = (r.get("text") or "").lower()
+        tags = [t.lower() for t in r.get("tags", [])]
+
+        # Base score boost
         boost = 0.0
 
-        doc_id = r.get("document_id", "").lower()
-        text = (r.get("text") or "").lower()
+        # 1️⃣ Heading relevance
+        if any(term in heading for term in query_terms):
+            boost += 0.1
 
-        # Strong signal: document title
-        if "telemetry" in query_lower and "telemetry" in doc_id:
-            boost += 0.5
-        if "dashboard" in query_lower and "dashboard" in doc_id:
-            boost += 0.5
-        if "log" in query_lower and "log" in doc_id:
-            boost += 0.5
+        # 2️⃣ Text keyword overlap
+        overlap = sum(1 for term in query_terms if term in text)
+        boost += overlap * 0.02
 
-        # Weak signal: content overlap
-        for term in ["latency", "outage", "access", "search"]:
-            if term in query_lower and term in text:
-                boost += 0.1
+        # 3️⃣ Metadata tags match (if your schema includes tags/categories)
+        if any(term in tags for term in query_terms):
+            boost += 0.1
 
-        r["score"] = score + boost
+        # Add boost to original score
+        r["score"] += boost
         r["rerank_boost"] = boost
 
-    results.sort(key=lambda x: x["score"], reverse=True)
-    return results
+    # Sort by reranked score
+    return sorted(results, key=lambda x: x["score"], reverse=True)
+
 
 
 # Retrieving similar chunks
