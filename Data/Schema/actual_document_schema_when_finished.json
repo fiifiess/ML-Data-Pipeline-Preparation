@@ -1,0 +1,18 @@
+{
+  "document_id": "string",
+  "chunk_id": "string",
+  "source_file": "string",
+  "category": "architecture | runbook | postmortem | standard | faq",
+  "text": "string",
+  "language": "en",
+  "token_count": "int",
+  "chunk_index": "int",
+  "labels": {
+    "topic": "string",
+    "system": "string",
+    "severity": "low | medium | high",
+    "confidence": "float"
+  },
+  "created_at": "timestamp",
+  "pipeline_version": "string"
+}

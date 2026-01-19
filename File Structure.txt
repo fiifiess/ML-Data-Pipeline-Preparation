@@ -1,0 +1,30 @@
+ai_data_pipeline/
+├── data/
+│   ├── raw/
+│   │   └── markdown/
+│   ├── processed/
+│   │   ├── chunks/
+│   │   ├── embeddings/
+│   │   └── metadata/
+│   └── schemas/
+│       └── document_schema.json
+│
+├── pipeline/
+│   ├── ingest.py
+│   ├── clean.py
+│   ├── chunk.py
+│   ├── validate.py
+│   ├── embed.py
+│   ├── store.py
+│   └── run_pipeline.py
+│
+├── evaluation/
+│   ├── queries.json
+│   ├── ground_truth.json
+│   └── evaluate.py
+│
+├── analysis/
+│   └── notebooks/
+│
+├── README.md
+└── requirements.txt
