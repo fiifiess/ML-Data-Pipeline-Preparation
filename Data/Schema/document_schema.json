@@ -2,5 +2,6 @@
   "document_id": "string",
   "chunk_id": "string",
   "text": "string",
-  "source_file": "string"
+  "source_file": "string",
+  "tags": "string"
 }
