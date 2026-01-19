@@ -54,19 +54,44 @@ def chunk_text_by_heading(text):
         
     lines = text.splitlines()
     chunks = []
+    current_heading = None
     current_chunk = []
 
     for line in lines:
         if (line.startswith('##') or line.startswith('###')) and current_chunk:
             # Save previous chunk
-            chunks.append("\n".join(current_chunk).strip())
-            current_chunk = [line]
+            chunks.append({"heading": current_heading, "text": "\n".join(current_chunk).strip()})
+            current_chunk = []
+            current_heading = line.strip()
         else:
             current_chunk.append(line)
+   
     if current_chunk:
-        chunks.append("\n".join(current_chunk).strip())
+        chunks.append({"heading": current_heading, "text":"\n".join(current_chunk).strip()})
     
     return chunks
+
+def extract_tags_from_text(text: str, max_tags: int = 3) -> list:
+    """
+    Simple heuristic to extract tags from chunk text.
+    Picks the most frequent meaningful words as tags.
+    """
+    import re
+    from collections import Counter
+
+    if not text:
+        return []
+
+    # Lowercase and remove punctuation
+    words = re.findall(r'\b\w+\b', text.lower())
+
+    # Remove stopwords (common words that aren’t useful as tags)
+    stopwords = {"the", "and", "of", "in", "to", "a", "for", "on", "with", "is", "by", "an"}
+    meaningful_words = [w for w in words if w not in stopwords]
+
+    # Take the most frequent words as tags
+    most_common = [w for w, _ in Counter(meaningful_words).most_common(max_tags)]
+    return most_common
 
 
 # Converting to Structured Records
@@ -83,8 +108,9 @@ def build_records(raw_dir: Path):
             record = {
                 "document_id": file.name, #["filename"],    #keeps traceability
                 "chunk_id": str(idx),                    #helps debugging later
-                "text": chunk,                      #chunk content
-                "source_file": "manufacturing_docs"      #optional metadata
+                "text": str(chunk),                      #chunk content
+                "source_file": "manufacturing_docs",      #optional metadata
+                "tags": str(extract_tags_from_text((chunk["heading"] or "") + " " + chunk["text"]))
             }
             records.append(record)
     return records
@@ -100,7 +126,7 @@ def save_records(records, output_path):
 
 if __name__ == "__main__":
     files_data = load_markdown_files(RAW_DIR)
-    records = build_records(files_data)
+    records = build_records(RAW_DIR)#files_data)
 
     schema = load_schema(SCHEMA_FILE)
     validate_records(records, schema)
