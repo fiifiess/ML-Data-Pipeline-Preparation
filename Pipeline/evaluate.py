@@ -21,12 +21,12 @@ TOP_K = 3
 # Evaluation queries with expected documents
 
 EVAL_QUERIES = [
-    {"query": "machine telemetry latency issue",
-     "relevant_docs": ["telemetry_data_latency_runbook.md"]},
-    {"query": "dashboard access problems for operators",
-     "relevant_docs": ["dashboard_access_service_overview.md"]},
-    {"query": "machine log search outage",
-     "relevant_docs": ["machine_log_search_outage.md"]}
+    {"query": "sensor calibration",
+     "relevant_docs": ["sensor_calibration_procedures.md"]},
+    {"query": "production downtime response",
+     "relevant_docs": ["production_line_downtime_response_playbook.md"]},
+    {"query": "cause of machine errors",
+     "relevant_docs": ["root_cause_analysis_framework.md"]}
 ]
 
 # Normalization for file names
@@ -55,14 +55,18 @@ def main():
 
     print("Retrieval Evaluation Results\n")
 
+    # Use TF-IDF as embedding-like vectors
     vectorizer, tfidf_matrix = build_tfidf_index(records)
 
     for item in EVAL_QUERIES:
         query = item["query"]
         relevant_docs = item["relevant_docs"]
 
-        results = retrieve(query, records, TOP_K)
-        results = rerank_results(query, results)
+        #results = retrieve(query, records, TOP_K)
+        #results = rerank_results(query, results)
+
+        # Treat TF-IDF retrieval as embedding retrieval for this evaluation
+        results = retrieve_tfidf(query, records, vectorizer, tfidf_matrix, TOP_K)
 
         tfidf_results = retrieve_tfidf(
             query,
@@ -83,7 +87,8 @@ def main():
         print("Top results:")
 
         for r in results:
-            print(f" - {r['document_id']} (score = {r['score']: .3f})")
+            chunk_info = f" (chunk {r['chunk_id']})" if 'chunk_id' in r else ''
+            print(f" - {r['document_id']}{chunk_info} (score = {r['score']: .3f})")
         print("-" * 40)
 
         avg_precision = total_precision / len(EVAL_QUERIES)

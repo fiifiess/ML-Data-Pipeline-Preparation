@@ -24,6 +24,7 @@ def retrieve_tfidf(query, records, vectorizer, matrix, top_k=3):
     return [
         {
             "document_id": r["document_id"],
+            "chunk_id": r.get("chunk_id", None), # just added this. Remove if it causes problems!
             "score": float(score)
         }
         for r, score in ranked[:top_k]
