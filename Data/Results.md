@@ -149,3 +149,19 @@ Top results:
  - plant_expansion_planning_guide.md (chunk 0) (score =  0.112)
 ----------------------------------------
 Average Precision@5: 0.64
+
+
+----------------------------------------
+Results Table
+
+Query Type	Precision at K=1	Precision at K=3	Precision at K=5	Top Result
+Machine software bug	1.00	1.00	0.80	machine_software_update_policy.md (chunk 0) (score =  0.554)
+
+Sensor calibration	1.00	1.00	1.00	sensor_calibration_procedures.md (chunk 0) (score =  0.641)
+
+Quality Inspection & Feedback	1.00	0.33	0.40	quality_inspection_standards.md (chunk 0) (score =  0.502)
+
+Energy & Utilities Monitoring	1.00	0.67	0.44	energy_consumption_monitoring.md (chunk 0) (score =  0.350)
+
+Production Planning and scheduling	1.00	0.67	0.56	production_scheduling_rules.md (chunk 0) (score =  0.219)
+
