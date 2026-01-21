@@ -71,6 +71,9 @@ The limitations and next steps are also presented in the "error_analysis.md" fil
 ## Evaluation Results
 see Results.md file in Data folder.
 
+## Limitations
+The results however do not prove that this system is robust. It can be observed that the queries were quite clean, explicit, and intentionally close to the actual document titles. this was done to test the model and be sure it works. In a query that included scrappy language like “robot arm stopped unexpectedly”, or "the poor internet is affecting the conveyor belt", the system might struggle to produce precise results. This model has not yet been designed to handle paraphrasing, synonyms, or intent and context. nThose are reserved for the next phase of the project. Again, an actual ML model can be swapped to handle the embedding role through an API call.
+
 ## Next Steps
 
 * Metadata-aware reranking
