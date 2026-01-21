@@ -16,17 +16,37 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 #EMBEDDED_FILE = Path("/Users/fiifiattuah/Desktop/ai_data_pipeline/Data/processed/embedded_data.json")
 EMBEDDED_FILE = PROJECT_ROOT / "Data/Processed/embedded_data.json"
-TOP_K = 3
+TOP_K = 5
 
 # Evaluation queries with expected documents
 
+'''
 EVAL_QUERIES = [
     {"query": "sensor calibration",
      "relevant_docs": ["sensor_calibration_procedures.md"]},
     {"query": "production downtime response",
      "relevant_docs": ["production_line_downtime_response_playbook.md"]},
     {"query": "cause of machine errors",
+     "relevant_docs": ["root_cause_analysis_framework.md"]},
+    {"query": "production downtime response",
+     "relevant_docs": ["production_line_downtime_response_playbook.md"]},
+    {"query": "cause of machine errors",
      "relevant_docs": ["root_cause_analysis_framework.md"]}
+]
+'''
+
+
+EVAL_QUERIES = [
+    {"query": "machine software bug",
+     "relevant_docs": ["machine_software_update_policy.md"]},
+    {"query": "sensor calibration",
+     "relevant_docs": ["sensor_calibration_procedures.md"]},
+    {"query": "quality inspection and feedback",
+     "relevant_docs": ["quality_inspection_standards.md"]},
+    {"query": "energy and utilities monitoring",
+     "relevant_docs": ["energy_consumption_monitoring.md"]},
+    {"query": "production planning and scheduling",
+     "relevant_docs": ["production_scheduling_rules.md"]}
 ]
 
 # Normalization for file names
