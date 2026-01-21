@@ -1,22 +1,24 @@
 ai_data_pipeline/
+├── analysis/
+│   ├── notebooks/
+│   │   ├── error_analysis.md
 ├── data/
 │   ├── raw/
-│   │   └── markdown/
+│   │   └── markdown files...
 │   ├── processed/
-│   │   ├── chunks/
-│   │   ├── embeddings/
-│   │   └── metadata/
+│   │   ├── embedded_data.json
+│   │   ├── ingested_data.json
 │   └── schemas/
 │       └── document_schema.json
 │
 ├── pipeline/
-│   ├── ingest.py
-│   ├── clean.py
-│   ├── chunk.py
-│   ├── validate.py
 │   ├── embed.py
-│   ├── store.py
+│   └── evaluate.py
+│   ├── ingest.py
+│   ├── retrieve.py
 │   └── run_pipeline.py
+│   ├── tfidf_retrieve.py
+│   ├── validate.py
 │
 ├── evaluation/
 │   ├── queries.json
@@ -26,5 +28,5 @@ ai_data_pipeline/
 ├── analysis/
 │   └── notebooks/
 │
-├── README.md
-└── requirements.txt
+├── README
+│   └── read.md
